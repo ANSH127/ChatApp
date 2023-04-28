@@ -1,86 +1,39 @@
-import {React,useState,useEffect} from 'react'
-
-import { Button,Container } from '@mui/material'
+import React from 'react'
+import supabase from '../config/SupabaseClient'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import supabase from '../config/SupabaseClient';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-const styles = {
-    height: '100vh',
-    width: '100vw',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#fff'
-
-}
 function Home() {
-    const [user, setUser] = useState(false)
-    const navigate=useNavigate()
-    const fetchUser = async () => {
+  const navigate = useNavigate()
+  
+
+
+
+
+
+    useEffect(() => {
+      const fetchUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          setUser(true);
-    
-    
+          console.log(user);
         }
         else {
-          console.log('no user');
+          navigate('/login');
+
         }
       }
-      useEffect(() => {
-        fetchUser();
-    
-    
-    
-    
-      }, [])
-    
-    
-  return (
-    <>
-    <Container style={styles}>
-        {!user && <Button variant="contained" color="primary" size='large' sx={{margin:'4px 4px'}}
-        onClick={
-            ()=>{
-                navigate('/login')
-            }
-
-        }
-         >Login</Button>}
-        {!user && <Button variant="contained" color="secondary" size='large'
-        onClick={
-            ()=>{
-                navigate('/signup')
-            }
-        }
-        >Sign Up</Button>}
-
-        {user && <Button variant="contained" color="secondary" size='large'
-        onClick={async () => {
-
-                const { error } = await supabase.auth.signOut()
-                if (error) {
-                  console.log('Error logging out:', error.message);
-                  toast.error(error.message);
-                  return;
-                }
-
-                setUser(false);
-                navigate('/login')
+      fetchUser();
+      // eslint-disable-next-line
+    }, [])
 
 
 
-              }
-              }
-        
-        >Logout</Button>}
-        <ToastContainer />
-    </Container>
-    </>
-  )
-}
+    return (
+      <>
+        {<div>
+          <h1>Home</h1>
+        </div>}
+      </>
+    )
+  }
 
-export default Home
+  export default Home
