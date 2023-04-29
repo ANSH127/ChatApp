@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
-import loading from '../loading.gif' 
+import loading from '../loading.gif'
 
 function Chat() {
     const navigate = useNavigate();
@@ -101,6 +101,7 @@ function Chat() {
             .from('messages')
             .select()
             .or(`and(request_from.eq.${sid},request_to.eq.${rid}),and(request_from.eq.${rid},request_to.eq.${sid}))`)
+            .order('created_at', { ascending: true })
         if (error) {
             console.log(error);
         }
@@ -108,7 +109,19 @@ function Chat() {
             console.log(data);
             setChat(data);
             setLoader(false);
+            handleSeen(sid, rid);
         }
+    }
+
+    const handleSeen = async (sid, rid) => {
+        const { error } = await supabase
+            .from('messages')
+            .update({ status: 'seen' })
+            .match({ request_from: rid, request_to: sid, status: 'unseen' })
+        if (error) {
+            console.log(error);
+        }
+
     }
 
 
@@ -118,7 +131,7 @@ function Chat() {
         <Container>
             {loader &&
 
-                <div style={{textAlign:'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     <img className='my-3' src={loading} alt="loading" width='35px' />
                 </div>
 
@@ -202,6 +215,13 @@ function Chat() {
                                         <br />
 
                                         <Chip label={(item.time).slice(0, 5)} />
+                                        <br />
+                                        
+
+
+
+
+                                        {item.status === 'seen' && <Chip label='Seen' sx={{backgroundColor:"transparent"}} />}
 
                                     </Typography>
 
@@ -211,6 +231,8 @@ function Chat() {
                                         {item.msg}
                                         <br />
                                         <Chip label={(item.time).slice(0, 5)} />
+                                        
+
 
                                     </Typography>
 
