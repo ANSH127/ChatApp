@@ -14,6 +14,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import loading from '../loading.gif'
+import { Avatar } from '@mui/material';
+import format from 'date-fns/format';
 
 function Chat() {
     const navigate = useNavigate();
@@ -23,6 +25,8 @@ function Chat() {
     const [msg, setMsg] = useState('');
     const [chat, setChat] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [receivername, setReceivername] = useState('');
+    const [lastseen, setLastseen] = useState('');
     const Verify = async (sid) => {
         const { data, error } = await supabase
             .from('Request')
@@ -31,6 +35,10 @@ function Chat() {
         if (error) {
             console.log(error);
         }
+        else if (data.length === 0) {
+            alert('Something went wrong');
+            navigate('/msg');
+        }
         else {
             // console.log(data);
             if (data[0].request_from === sid || data[0].request_to === sid) {
@@ -38,18 +46,21 @@ function Chat() {
                 if (data[0].request_from === sid) {
                     setReceiverid(data[0].request_to);
                     fetchChats(sid, data[0].request_to);
+                    recivername(data[0].request_to);
+
 
 
                 }
                 else {
                     setReceiverid(data[0].request_from);
                     fetchChats(sid, data[0].request_from);
+                    recivername(data[0].request_from);
                 }
                 // console.log('true');
             }
             else {
-                alert('You are not allowed to chat with this user');
                 navigate('/msg');
+                alert('Something went wrong')
 
             }
         }
@@ -111,6 +122,12 @@ function Chat() {
             setChat(data);
             setLoader(false);
             handleSeen(sid, rid);
+            updateSeen();
+
+
+
+
+            reciverlastseen(rid);
         }
     }
 
@@ -121,6 +138,81 @@ function Chat() {
             .match({ request_from: rid, request_to: sid, status: 'unseen' })
         if (error) {
             console.log(error);
+        }
+
+    }
+    const recivername = async (id) => {
+        const { data, error } = await supabase
+            .from('Users')
+            .select('username')
+            .eq('user_id', id)
+        if (error) {
+            console.log(error);
+        }
+        else {
+            setReceivername(data[0].username);
+        }
+    }
+    const updateSeen = async () => {
+        const { error } = await supabase
+            .from('Users')
+            .update({ last_seen: new Date().toLocaleTimeString(), last_seen_date: format(new Date(), 'yyyy-MM-dd') })
+            .eq('user_id', senderid)
+        if (error) {
+            console.log(error);
+        }
+    }
+    const reciverlastseen = async (id) => {
+        const { data, error } = await supabase
+            .from('Users')
+            .select('last_seen, last_seen_date')
+            .eq('user_id', id)
+        if (error) {
+            console.log(error);
+        }
+        else {
+            // console.log(data);
+            setLastseen(timediff(data[0].last_seen, data[0].last_seen_date));
+
+        }
+    }
+
+    const timediff = (time, date) => {
+        const newdate = format(new Date(), 'yyyy-MM-dd');
+        let date_diff = new Date(newdate) - new Date(date);
+        date_diff = (Math.floor(date_diff / (1000 * 60 * 60 * 24)));
+        
+
+
+        const newtime = new Date().toLocaleTimeString();
+        const t1 = time.split(':');
+        const t2 = newtime.split(':');
+        const h1 = parseInt(t1[0]);
+        const m1 = parseInt(t1[1]);
+        const h2 = parseInt(t2[0]);
+        const m2 = parseInt(t2[1]);
+        const diff = (h2 - h1) * 60 + (m2 - m1);
+        if (date_diff === 0) {
+
+            if (diff < 1) {
+                return 'Online';
+            }
+            else {
+                if (diff > 60) {
+                    return `${Math.floor(diff / 60)} hours ago`;
+                }
+
+                else {
+                    return `${diff} minutes ago`;
+                }
+
+            }
+        }
+        else if (date_diff === 1) {
+            return 'Yesterday';
+        }
+        else {
+            return `${date_diff} days ago`;
         }
 
     }
@@ -137,111 +229,126 @@ function Chat() {
                 </div>
 
             }
-            {!loader && <Box
-                sx={
-                    {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        // alignItems: 'center',
-                        justifyContent: 'center',
-                        height: 'auto'
+            {!loader &&
+                <>
+                    <Avatar alt="Ansh" align='center' src="/60111.jpg" sx={{ width: 56, height: 56, margin: 'auto' }} />
+                    <div style={{ textAlign: 'center' }} >
+                        <h3>
+                            {receivername}
+                            <Chip sx={{ marginLeft: 1 }} color='success' size='small' label={lastseen} />
 
-                    }
-                }
-            >
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        color='primary'
-                        sx={{
-                            position: 'fixed', bottom: 0, marginBottom: 2, width: 'auto'
+                        </h3>
+
+                    </div>
 
 
-                        }}
-                        type='text'
-                        fullWidth
-                        error={msg === '' ? true : false}
-                        required
-                        id="msg"
-                        label="Enter message"
-                        variant="filled"
-                        onChange={(e) => setMsg(e.target.value)}
-                        value={msg}
-                        InputProps={{
-                            endAdornment: (
-                                <>
-
-
-                                    <RefreshOutlinedIcon
-                                        sx={{ cursor: 'pointer', marginRight: 2 }}
-                                        onClick={() => fetchChats(senderid, receiverid)}
-                                    />
-
-                                    <Button
-                                        type='submit'
-                                        color='primary'
-                                        variant='contained'
-                                    >
-                                        Send
-                                    </Button>
-                                </>
-                            )
-
-
-
-
-                        }}
-                    />
-
-
-                </form>
-
-
-                {chat.map((item, index) => {
-                    return (
-
-                        <div key={item.id}>
-
-
-                            <Typography variant='h6' sx={{ color: "black" }} align='center'>
-                                {
-                                    index === 0 ? (item.created_at).slice(0, 10) : (item.created_at).slice(0, 10) === (chat[index - 1]?.created_at).slice(0, 10) ? null : (item.created_at).slice(0, 10)}
-
-
-                            </Typography>
+                    <Box
+                        sx={
                             {
-                                item.request_from === senderid ?
-
-                                    <Typography variant='h6' color='primary' align='right'>
-                                        {item.msg}
-                                        <br />
-
-                                        <Chip label={(item.time).slice(0, 5)} />
-                                        <br />
-                                        
-
-
-
-
-                                        {item.status === 'seen' && <Chip label='Seen' sx={{backgroundColor:"transparent"}} />}
-
-                                    </Typography>
-
-
-                                    :
-                                    <Typography variant='h6' color='primary' align='left'>
-                                        {item.msg}
-                                        <br />
-                                        <Chip label={(item.time).slice(0, 5)} />
-                                        
-
-
-                                    </Typography>
+                                display: 'flex',
+                                flexDirection: 'column',
+                                // alignItems: 'center',
+                                justifyContent: 'center',
+                                height: 'auto'
 
                             }
-                        </div>
-                    )
-                })}
-            </Box>}
+                        }
+                    >
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                color='primary'
+                                sx={{
+                                    position: 'fixed', bottom: 0, marginBottom: 2, width: 'auto'
+
+
+                                }}
+                                type='text'
+                                fullWidth
+                                error={msg === '' ? true : false}
+                                required
+                                id="msg"
+                                label="Enter message"
+                                variant="filled"
+                                onChange={(e) => setMsg(e.target.value)}
+                                value={msg}
+                                InputProps={{
+                                    endAdornment: (
+                                        <>
+
+
+                                            <RefreshOutlinedIcon
+                                                sx={{ cursor: 'pointer', marginRight: 2 }}
+                                                onClick={() => fetchChats(senderid, receiverid)}
+                                            />
+
+                                            <Button
+                                                type='submit'
+                                                color='primary'
+                                                variant='contained'
+                                            >
+                                                Send
+                                            </Button>
+                                        </>
+                                    )
+
+
+
+
+                                }}
+                            />
+
+
+                        </form>
+
+
+                        {chat.map((item, index) => {
+                            return (
+
+                                <div key={item.id}>
+
+
+                                    <Typography variant='h6' sx={{ color: "black" }} align='center'>
+                                        {
+                                            index === 0 ? <Chip   size='medium' label={(item.created_at).slice(0, 10)} /> : (item.created_at).slice(0, 10) === (chat[index - 1]?.created_at).slice(0, 10) ? null : <Chip   size='medium' label={(item.created_at).slice(0, 10)} />}
+                                            
+
+
+                                    </Typography>
+                                    {
+                                        item.request_from === senderid ?
+
+                                            <Typography variant='h6' color='primary' align='right'>
+                                                {item.msg}
+                                                <br />
+
+                                                <Chip label={(item.time).slice(0, 5)} />
+                                                <br />
+
+
+
+
+
+                                                {item.status === 'seen' && <Chip label='Seen' sx={{ backgroundColor: "transparent" }} />}
+
+                                            </Typography>
+
+
+                                            :
+                                            <Typography variant='h6' color='primary' align='left'>
+                                                {item.msg}
+                                                <br />
+                                                <Chip label={(item.time).slice(0, 5)} />
+
+
+
+                                            </Typography>
+
+                                    }
+                                </div>
+                            )
+                        })}
+                    </Box>
+                </>}
             <ToastContainer />
 
         </Container>
