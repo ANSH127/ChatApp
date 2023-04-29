@@ -37,7 +37,7 @@ function YourFriend() {
     else {
       setRequestsent(data);
       setSentloader(false);
-      console.log(data);
+      // console.log(data);
 
     }
   }
@@ -58,7 +58,7 @@ function YourFriend() {
     else {
       setRequestreceived(data);
       setReceivedloader(false);
-      console.log(data);
+      // console.log(data);
     }
   }
   const fetchFriends = async (id) => {
@@ -77,9 +77,9 @@ function YourFriend() {
     }
     else {
       setFriends(data);
-      console.log('friends', data);
+      // console.log('friends', data);
       setFriendloader(false);
-      console.log(username);
+      // console.log(username);
     }
   }
   const confirmrequest = async (id) => {
@@ -102,7 +102,7 @@ function YourFriend() {
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        console.log(user);
+        // console.log(user);
         setUsername(user.id);
         fetchsentRequest(user.id);
         fetchreceivedRequest(user.id);

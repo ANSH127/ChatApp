@@ -73,7 +73,7 @@ export default function AddFriend() {
 
 
     const SentRequest = async (id) => {
-        console.log('id', id);
+        // console.log('id', id);
         const { data, error } = await supabase
             .from('Request')
             .insert({ request_from: userid, request_to: id })

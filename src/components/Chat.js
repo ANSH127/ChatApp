@@ -32,7 +32,7 @@ function Chat() {
             console.log(error);
         }
         else {
-            console.log(data);
+            // console.log(data);
             if (data[0].request_from === sid || data[0].request_to === sid) {
 
                 if (data[0].request_from === sid) {
@@ -45,7 +45,7 @@ function Chat() {
                     setReceiverid(data[0].request_from);
                     fetchChats(sid, data[0].request_from);
                 }
-                console.log('true');
+                // console.log('true');
             }
             else {
                 alert('You are not allowed to chat with this user');
@@ -79,7 +79,7 @@ function Chat() {
     }, [])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(msg);
+        // console.log(msg);
         const { data, error } = await supabase
             .from('messages')
             .insert({ request_from: senderid, request_to: receiverid, msg: msg })
@@ -97,6 +97,7 @@ function Chat() {
     }
 
     const fetchChats = async (sid, rid) => {
+        setLoader(true);
         const { data, error } = await supabase
             .from('messages')
             .select()
@@ -106,7 +107,7 @@ function Chat() {
             console.log(error);
         }
         else {
-            console.log(data);
+            // console.log(data);
             setChat(data);
             setLoader(false);
             handleSeen(sid, rid);

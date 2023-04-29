@@ -14,7 +14,7 @@ function Home() {
       const fetchUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          console.log(user);
+          // console.log(user);
         }
         else {
           navigate('/login');

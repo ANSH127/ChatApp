@@ -34,8 +34,8 @@ function Message() {
     }
     else {
       setFriends(data);
-      console.log('friends', data);
-      console.log(username);
+      // console.log('friends', data);
+      // console.log(username);
         setLoader(false);
     }
   }
@@ -43,7 +43,7 @@ function Message() {
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        console.log(user);
+        // console.log(user);
         setUsername(user.id);
         fetchFriends(user.id);
       }
@@ -59,7 +59,7 @@ function Message() {
     // eslint-disable-next-line
   }, [])
   const popmsgbox = (id) => {
-    console.log(id);
+    // console.log(id);
     navigate(`/chat/${id}`);
   }
   
