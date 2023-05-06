@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import supabase from '../config/SupabaseClient'
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,8 @@ import loading from '../loading.gif'
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
 
+
+
 function Chat() {
     const navigate = useNavigate();
     const { id } = useParams()
@@ -27,6 +29,7 @@ function Chat() {
     const [loader, setLoader] = useState(true);
     const [receivername, setReceivername] = useState('');
     const [lastseen, setLastseen] = useState('');
+    const messagesEndRef = useRef(null);
     const Verify = async (sid) => {
         const { data, error } = await supabase
             .from('Request')
@@ -106,9 +109,15 @@ function Chat() {
 
         }
     }
+    const scrolltoBottom = () => {
+        if (messagesEndRef.current) {
+            console.log(messagesEndRef.current);
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
 
     const fetchChats = async (sid, rid) => {
-        setLoader(true);
+        
         const { data, error } = await supabase
             .from('messages')
             .select()
@@ -121,8 +130,10 @@ function Chat() {
             // console.log(data);
             setChat(data);
             setLoader(false);
+            scrolltoBottom();
             handleSeen(sid, rid);
             updateSeen();
+
 
 
 
@@ -216,6 +227,8 @@ function Chat() {
         }
 
     }
+    
+        
 
 
 
@@ -350,6 +363,13 @@ function Chat() {
                     </Box>
                 </>}
             <ToastContainer />
+            {/* scroll to the bottem of the page */}
+
+            <div
+                style={{ float: "left", clear: "both" }}
+                ref={messagesEndRef}
+
+            ></div>
 
         </Container>
     )

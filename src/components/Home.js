@@ -2,6 +2,8 @@ import React from 'react'
 import supabase from '../config/SupabaseClient'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Typography from '@mui/material/Typography';
+
 function Home() {
   const navigate = useNavigate()
   
@@ -29,9 +31,11 @@ function Home() {
 
     return (
       <>
-        {<div>
-          <h1>Home</h1>
-        </div>}
+      <Typography variant="h4" component="div" align='center' 
+
+       gutterBottom>
+      Welcome to the Chat App
+    </Typography>
       </>
     )
   }
