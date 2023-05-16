@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import supabase from '../config/SupabaseClient'
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Typography from '@mui/material/Typography';
@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
+// import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import loading from '../loading.gif'
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
@@ -111,13 +111,13 @@ function Chat() {
     }
     const scrolltoBottom = () => {
         if (messagesEndRef.current) {
-            console.log(messagesEndRef.current);
+            // console.log(messagesEndRef.current);
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
 
     const fetchChats = async (sid, rid) => {
-        
+
         const { data, error } = await supabase
             .from('messages')
             .select()
@@ -184,25 +184,31 @@ function Chat() {
         else {
             // console.log(data);
             setLastseen(timediff(data[0].last_seen, data[0].last_seen_date));
+            // console.log(timediff(data[0].last_seen, data[0].last_seen_date));
 
         }
     }
 
     const timediff = (time, date) => {
+        // console.log(time, date);
         const newdate = format(new Date(), 'yyyy-MM-dd');
         let date_diff = new Date(newdate) - new Date(date);
+        // console.log(date_diff);
         date_diff = (Math.floor(date_diff / (1000 * 60 * 60 * 24)));
-        
+        // console.log(date_diff);
 
 
-        const newtime = new Date().toLocaleTimeString();
+
+        const newtime = new Date().toLocaleTimeString([],{hour12:false});
         const t1 = time.split(':');
         const t2 = newtime.split(':');
+        
         const h1 = parseInt(t1[0]);
         const m1 = parseInt(t1[1]);
         const h2 = parseInt(t2[0]);
         const m2 = parseInt(t2[1]);
         const diff = (h2 - h1) * 60 + (m2 - m1);
+        // console.log(diff);
         if (date_diff === 0) {
 
             if (diff < 1) {
@@ -227,8 +233,25 @@ function Chat() {
         }
 
     }
-    
-        
+
+    // Supabase client setup
+    // eslint-disable-next-line
+    const channel = supabase
+        .channel('changes')
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'messages',
+                filter: `request_from=eq.${receiverid}`,
+            },
+            (payload) => {
+                fetchChats(senderid, receiverid);
+            }
+        )
+        .subscribe()
+
 
 
 
@@ -289,10 +312,10 @@ function Chat() {
                                         <>
 
 
-                                            <RefreshOutlinedIcon
+                                            {/* <RefreshOutlinedIcon
                                                 sx={{ cursor: 'pointer', marginRight: 2 }}
                                                 onClick={() => fetchChats(senderid, receiverid)}
-                                            />
+                                            /> */}
 
                                             <Button
                                                 type='submit'
@@ -322,8 +345,8 @@ function Chat() {
 
                                     <Typography variant='h6' sx={{ color: "black" }} align='center'>
                                         {
-                                            index === 0 ? <Chip   size='medium' label={(item.created_at).slice(0, 10)} /> : (item.created_at).slice(0, 10) === (chat[index - 1]?.created_at).slice(0, 10) ? null : <Chip   size='medium' label={(item.created_at).slice(0, 10)} />}
-                                            
+                                            index === 0 ? <Chip size='medium' label={(item.created_at).slice(0, 10)} /> : (item.created_at).slice(0, 10) === (chat[index - 1]?.created_at).slice(0, 10) ? null : <Chip size='medium' label={(item.created_at).slice(0, 10)} />}
+
 
 
                                     </Typography>

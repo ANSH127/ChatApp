@@ -3,6 +3,7 @@ import supabase from '../config/SupabaseClient'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Typography from '@mui/material/Typography';
+import updateSeen from '../composables/UpdateSeen';
 
 function Home() {
   const navigate = useNavigate()
@@ -16,7 +17,7 @@ function Home() {
       const fetchUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
-          // console.log(user);
+          updateSeen(user.id);
         }
         else {
           navigate('/login');

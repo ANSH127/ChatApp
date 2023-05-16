@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import loading from '../loading.gif'
 import Badge from '@mui/material/Badge';
+import updateSeen from '../composables/UpdateSeen';
+
 
 
 function Message() {
@@ -20,7 +22,7 @@ function Message() {
   const [username, setUsername] = useState('');
   const [friends, setFriends] = useState([]);
   const [loader, setLoader] = useState(true);
-  const [noofunseen,setNoofunseen]=useState([]);
+  const [noofunseen, setNoofunseen] = useState([]);
   const fetchFriends = async (id) => {
 
     const { data, error } = await supabase
@@ -40,7 +42,7 @@ function Message() {
       // console.log('friends', data);
       // console.log(username);
       setLoader(false);
-      fetchunread(data,id);
+      fetchunread(data, id);
     }
   }
   useEffect(() => {
@@ -50,6 +52,7 @@ function Message() {
         // console.log(user);
         setUsername(user.id);
         fetchFriends(user.id);
+        updateSeen(user.id);
       }
       else {
         navigate('/login');
@@ -67,41 +70,41 @@ function Message() {
     navigate(`/chat/${id}`);
   }
 
-  const fetchunread = async (list,userid) => {
-    const arr=[];
-    for(let i=0;i<list.length;i++){
+  const fetchunread = async (list, userid) => {
+    const arr = [];
+    for (let i = 0; i < list.length; i++) {
       // console.log("my username",userid);
-      if(list[i].request_from===userid){
+      if (list[i].request_from === userid) {
         // console.log(list[i].request_to);
-        const {data,error}=await supabase
-        .from('messages')
-        .select()
-        .match({request_to:userid,request_from:list[i].request_to,status:'unseen'})
-        if(error){
+        const { data, error } = await supabase
+          .from('messages')
+          .select()
+          .match({ request_to: userid, request_from: list[i].request_to, status: 'unseen' })
+        if (error) {
           console.log(error);
         }
 
-        else{
+        else {
           // console.log(data);
-          arr[i]=data.length;
+          arr[i] = data.length;
 
 
         }
 
       }
-      else{
+      else {
         // console.log(list[i].request_from);
-        const {data,error}=await supabase
-        .from('messages')
-        .select()
-        .match({request_to:userid,request_from:list[i].request_from,status:'unseen'})
-        if(error){
+        const { data, error } = await supabase
+          .from('messages')
+          .select()
+          .match({ request_to: userid, request_from: list[i].request_from, status: 'unseen' })
+        if (error) {
           console.log(error);
         }
 
-        else{
+        else {
           // console.log(data);
-          arr[i]=data.length;
+          arr[i] = data.length;
 
         }
 
@@ -110,8 +113,10 @@ function Message() {
     // console.log(arr);
     setNoofunseen(arr);
   }
+  
 
-    
+
+
 
 
   return (
@@ -149,9 +154,9 @@ function Message() {
 
 
                     >
-                        Message 
+                      Message
                       <Badge color="error" badgeContent={noofunseen[index]}>
-                      <MessageOutlinedIcon sx={{marginLeft:'2px'}} />
+                        <MessageOutlinedIcon sx={{ marginLeft: '2px' }} />
                       </Badge>
 
                     </Button>
