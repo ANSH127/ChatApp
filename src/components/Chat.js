@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import loading from '../loading.gif'
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
+import CustomizedMenus from './Menus';
 
 
 
@@ -354,7 +355,10 @@ function Chat() {
                                         item.request_from === senderid ?
 
                                             <Typography variant='h6' color='primary' align='right'>
-                                                {item.msg}
+                                                <span>
+
+                                             <CustomizedMenus id={item.id} msg={item.msg} />   {item.msg}
+                                                </span>
                                                 <br />
 
                                                 <Chip label={(item.time).slice(0, 5)} />
@@ -371,7 +375,7 @@ function Chat() {
 
                                             :
                                             <Typography variant='h6' color='primary' align='left'>
-                                                {item.msg}
+                                                {item.msg} 
                                                 <br />
                                                 <Chip label={(item.time).slice(0, 5)} />
 
