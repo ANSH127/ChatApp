@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Typography from '@mui/material/Typography';
 import updateSeen from '../composables/UpdateSeen';
+import fetchGUser from '../composables/Add_Google_User';
 
 function Home() {
   const navigate = useNavigate()
@@ -17,6 +18,9 @@ function Home() {
       const fetchUser = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
+          console.log(user.app_metadata.provider);
+          user.app_metadata.provider === 'google' ?
+          fetchGUser(user.id,user.user_metadata.full_name): console.log('');
           updateSeen(user.id);
         }
         else {

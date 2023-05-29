@@ -124,8 +124,10 @@ export default function MiniDrawer({ children }) {
   const fetchUser = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
+      // console.log(user);
       setUser(true);
-      setUsername(user.user_metadata.username);
+
+      user.app_metadata.provider === 'google' ? setUsername(user.user_metadata.full_name) : setUsername(user.user_metadata.username);
 
 
     }

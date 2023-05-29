@@ -4,6 +4,7 @@ import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRig
 import { useState } from 'react';
 import supabase from '../config/SupabaseClient';
 import { useNavigate } from 'react-router-dom';
+import GoogleIcon from '@mui/icons-material/Google';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -41,11 +42,41 @@ function Login() {
                 // reload the page
                 window.location.reload();
 
-                
+
             }, 1);
         }
 
     }
+
+    const GoogleAuth = async (e) => {
+        e.preventDefault();
+        console.log('google auth');
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google'
+        })
+
+        if (error) {
+            toast.error('Something went wrong')
+            console.log(error)
+            return;
+        }
+        if (data) {
+            toast.success('User LoggedIn Successfully')
+            console.log(data);
+            // setTimeout(() => {
+            //     navigate('/')
+            //     // reload the page
+            //     window.location.reload();
+
+            // }, 1);
+        }
+
+
+
+    }
+
+
+
     return (
         <Container>
             <Typography variant="h4" component="h2" align='center' gutterBottom>
@@ -73,15 +104,28 @@ function Login() {
                     variant="standard"
                     onChange={(e) => { setDetails({ ...details, password: e.target.value }) }}
                 />
+
                 <Button
                     // style={btn}
                     type='submit'
                     color='primary'
                     variant='contained'
                     endIcon={<KeyboardArrowRightOutlinedIcon />}
+                    style={{margin:'10px 10px'}}
                 >
                     Submit
                 </Button>
+                <Button
+                    // style={btn}
+                    type='button'
+                    color='primary'
+                    variant='contained'
+                    onClick={GoogleAuth}
+                    endIcon={<GoogleIcon />}
+                >
+                   Login with
+                </Button>
+
 
 
             </form>
