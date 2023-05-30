@@ -354,10 +354,16 @@ function Chat() {
                                     {
                                         item.request_from === senderid ?
 
-                                            <Typography variant='h6' color='primary' align='right'>
-                                                <span>
+                                            <Typography variant='h6' color='primary' align='right'
 
-                                             <CustomizedMenus id={item.id} msg={item.msg} />   {item.msg}
+                                            // onMouseOver={() =>document.getElementById(item.id).style.display='revert'}
+                                            >
+                                                <span onMouseOver={() =>document.getElementById(item.id).style.display='revert'} 
+                                                onMouseOut={() =>document.getElementById(item.id).style.display='none'}
+                                                 >
+
+                                             <CustomizedMenus id={item.id} msg={item.msg} sender={true} />
+                                                {item.msg}
                                                 </span>
                                                 <br />
 
@@ -375,7 +381,14 @@ function Chat() {
 
                                             :
                                             <Typography variant='h6' color='primary' align='left'>
+                                                <span onMouseOver={() =>document.getElementById(item.id).style.display='revert'} 
+                                                onMouseOut={() =>document.getElementById(item.id).style.display='none'}
+                                                 >
+
                                                 {item.msg} 
+                                             <CustomizedMenus id={item.id} msg={item.msg} sender={false} />
+                                                </span>
+
                                                 <br />
                                                 <Chip label={(item.time).slice(0, 5)} />
 

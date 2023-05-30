@@ -91,10 +91,11 @@ export default function CustomizedMenus(props) {
     <>
       <IconButton
         aria-label="more"
-        id="long-button"
+        id={props.id}
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
+        sx={{display:'none'}}
         onClick={handleClick}
       >
         <MoreVertIcon fontSize='small' />
@@ -113,10 +114,11 @@ export default function CustomizedMenus(props) {
           <ContentCopyOutlinedIcon fontSize='small' />
           Copy
         </MenuItem>
-        <MenuItem onClick={deleteMsg} disableRipple>
+        {props.sender && <MenuItem onClick={deleteMsg} disableRipple>
           <DeleteOutlineOutlinedIcon fontSize='small' />
-          Delete
-        </MenuItem>
+          Unsend
+
+        </MenuItem>}
 
       </StyledMenu>
     </>
