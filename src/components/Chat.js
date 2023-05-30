@@ -16,7 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import loading from '../loading.gif'
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
-import CustomizedMenus from './Menus';
+import CustomizedMenus from '../composables/Menus';
 
 
 
