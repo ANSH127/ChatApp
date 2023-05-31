@@ -35,6 +35,8 @@ function Chat() {
     const [lastseen, setLastseen] = useState('');
     const messagesEndRef = useRef(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [blockstatus, setBlockstatus] = useState(false);
+    const [blockby, setBlockby] = useState('');
 
     const Verify = async (sid) => {
         const { data, error } = await supabase
@@ -51,6 +53,13 @@ function Chat() {
         else {
             // console.log(data);
             if (data[0].request_from === sid || data[0].request_to === sid) {
+
+                if (data[0].block_status === true) {
+                    setBlockstatus(true);
+                    setBlockby(data[0].block_by);
+                    toast.error('You cannot send message to this user');
+                    // navigate('/msg');
+                }
 
                 if (data[0].request_from === sid) {
                     setReceiverid(data[0].request_to);
@@ -247,6 +256,38 @@ function Chat() {
         setAnchorEl(null);
     };
 
+    const blockuser = async () => {
+        const { error } = await supabase
+            .from('Request')
+            .update({ block_by: senderid, block_status: true })
+            .or(`and(request_from.eq.${senderid},request_to.eq.${receiverid}),and(request_from.eq.${receiverid},request_to.eq.${senderid}))`)
+        if (error) {
+            console.log(error);
+        }
+        else {
+            toast.success('User blocked');
+            window.location.reload();
+
+        }
+
+
+
+    }
+    const unblockuser = async () => {
+        const { error } = await supabase
+            .from('Request')
+            .update({ block_by: null, block_status: false })
+            .or(`and(request_from.eq.${senderid},request_to.eq.${receiverid}),and(request_from.eq.${receiverid},request_to.eq.${senderid}))`)
+        if (error) {
+            console.log(error);
+        }
+        else {
+            toast.success('User unblocked');
+            window.location.reload();
+
+        }
+    }
+
 
     // Supabase client setup
     // eslint-disable-next-line
@@ -281,17 +322,16 @@ function Chat() {
             }
             {!loader &&
                 <>
-                <div style={{textAlign:'center'}} >
-                    <IconButton
-                        onClick={handleClick}
-                        size="small"
-                        textAlign='center'
-                        aria-controls={open ? 'account-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                    >
-                        <Avatar alt="Ansh" align='center' src="/60111.jpg" sx={{ width: 56, height: 56, margin: 'auto' }} />
-                    </IconButton>
+                    <div style={{ textAlign: 'center' }} >
+                        <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            aria-controls={open ? 'account-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                        >
+                            <Avatar alt="Ansh" align='center' src="/60111.jpg" sx={{ width: 56, height: 56, margin: 'auto' }} />
+                        </IconButton>
                     </div>
 
                     <div style={{ textAlign: 'center' }} >
@@ -316,7 +356,7 @@ function Chat() {
                             }
                         }
                     >
-                        <form onSubmit={handleSubmit}>
+                        {!blockstatus && <form onSubmit={handleSubmit}>
                             <TextField
                                 color='primary'
                                 sx={{
@@ -360,7 +400,7 @@ function Chat() {
                             />
 
 
-                        </form>
+                        </form>}
 
 
                         {chat.map((item, index) => {
@@ -425,6 +465,19 @@ function Chat() {
                                 </div>
                             )
                         })}
+                        {blockstatus && blockby !== senderid && <Typography variant='h6' color='primary' align='center'>
+                            <Chip label='You are blocked by this user' sx={{ backgroundColor: "transparent" }} />
+
+
+
+
+                        </Typography>}
+                        {blockby === senderid && <Typography variant='h6' color='primary' align='center'>
+                            <Chip label='You blocked this user' sx={{ backgroundColor: "transparent" }} />
+                            <Button variant='contained' color='primary' onClick={unblockuser}>Unblock</Button>
+                        </Typography>
+
+                        }
                     </Box>
                 </>}
             <ToastContainer />
@@ -474,9 +527,15 @@ function Chat() {
                 <MenuItem onClick={handleClose}>
                     View Profile
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                {!blockstatus && <MenuItem onClick={blockuser}>
                     Block
-                </MenuItem>
+                </MenuItem>}
+                {
+                    blockby === senderid && <MenuItem onClick={unblockuser}>
+                        Unblock
+                    </MenuItem>
+
+                }
             </Menu>
 
         </Container>
