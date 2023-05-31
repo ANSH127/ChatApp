@@ -17,7 +17,7 @@ import loading from '../loading.gif'
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
 import CustomizedMenus from '../composables/Menus';
-
+import SendIcon from '@mui/icons-material/Send';
 
 
 function Chat() {
@@ -323,7 +323,7 @@ function Chat() {
                                                 color='primary'
                                                 variant='contained'
                                             >
-                                                Send
+                                                <SendIcon />
                                             </Button>
                                         </>
                                     )
