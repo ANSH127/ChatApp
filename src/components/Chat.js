@@ -3,7 +3,10 @@ import { useParams } from 'react-router-dom'
 import supabase from '../config/SupabaseClient'
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
 
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { Button, TextField, Container } from '@mui/material'
 import Chip from '@mui/material/Chip';
@@ -31,6 +34,8 @@ function Chat() {
     const [receivername, setReceivername] = useState('');
     const [lastseen, setLastseen] = useState('');
     const messagesEndRef = useRef(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
     const Verify = async (sid) => {
         const { data, error } = await supabase
             .from('Request')
@@ -200,10 +205,10 @@ function Chat() {
 
 
 
-        const newtime = new Date().toLocaleTimeString([],{hour12:false});
+        const newtime = new Date().toLocaleTimeString([], { hour12: false });
         const t1 = time.split(':');
         const t2 = newtime.split(':');
-        
+
         const h1 = parseInt(t1[0]);
         const m1 = parseInt(t1[1]);
         const h2 = parseInt(t2[0]);
@@ -234,6 +239,14 @@ function Chat() {
         }
 
     }
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
 
     // Supabase client setup
     // eslint-disable-next-line
@@ -268,7 +281,19 @@ function Chat() {
             }
             {!loader &&
                 <>
-                    <Avatar alt="Ansh" align='center' src="/60111.jpg" sx={{ width: 56, height: 56, margin: 'auto' }} />
+                <div style={{textAlign:'center'}} >
+                    <IconButton
+                        onClick={handleClick}
+                        size="small"
+                        textAlign='center'
+                        aria-controls={open ? 'account-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                    >
+                        <Avatar alt="Ansh" align='center' src="/60111.jpg" sx={{ width: 56, height: 56, margin: 'auto' }} />
+                    </IconButton>
+                    </div>
+
                     <div style={{ textAlign: 'center' }} >
                         <h3>
                             {receivername}
@@ -358,12 +383,12 @@ function Chat() {
 
                                             // onMouseOver={() =>document.getElementById(item.id).style.display='revert'}
                                             >
-                                                <span onMouseOver={() =>document.getElementById(item.id).style.display='revert'} 
-                                                onMouseOut={() =>document.getElementById(item.id).style.display='none'}
-                                                 >
+                                                <span onMouseOver={() => document.getElementById(item.id).style.display = 'revert'}
+                                                    onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
+                                                >
 
-                                             <CustomizedMenus id={item.id} msg={item.msg} sender={true} />
-                                                {item.msg}
+                                                    <CustomizedMenus id={item.id} msg={item.msg} sender={true} />
+                                                    {item.msg}
                                                 </span>
                                                 <br />
 
@@ -381,12 +406,12 @@ function Chat() {
 
                                             :
                                             <Typography variant='h6' color='primary' align='left'>
-                                                <span onMouseOver={() =>document.getElementById(item.id).style.display='revert'} 
-                                                onMouseOut={() =>document.getElementById(item.id).style.display='none'}
-                                                 >
+                                                <span onMouseOver={() => document.getElementById(item.id).style.display = 'revert'}
+                                                    onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
+                                                >
 
-                                                {item.msg} 
-                                             <CustomizedMenus id={item.id} msg={item.msg} sender={false} />
+                                                    {item.msg}
+                                                    <CustomizedMenus id={item.id} msg={item.msg} sender={false} />
                                                 </span>
 
                                                 <br />
@@ -410,6 +435,49 @@ function Chat() {
                 ref={messagesEndRef}
 
             ></div>
+
+            <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        overflow: 'visible',
+                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                        mt: 1.5,
+                        '& .MuiAvatar-root': {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
+                        },
+                        '&:before': {
+                            content: '""',
+                            display: 'block',
+                            position: 'absolute',
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: 'background.paper',
+                            transform: 'translateY(-50%) rotate(45deg)',
+                            zIndex: 0,
+                        },
+                    },
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+                <MenuItem onClick={handleClose}>
+                    View Profile
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    Block
+                </MenuItem>
+            </Menu>
 
         </Container>
     )
