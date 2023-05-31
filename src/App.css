@@ -1,3 +1,18 @@
+::-webkit-scrollbar{
+  width:8px !important;
+}
+::-webkit-scrollbar-track{
+  background-color: #F4F4F4;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #1976d2;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color: #137de7;
+}
+
 .App {
   text-align: center;
 }
