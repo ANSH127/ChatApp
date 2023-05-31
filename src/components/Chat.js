@@ -257,19 +257,22 @@ function Chat() {
     };
 
     const blockuser = async () => {
-        const { error } = await supabase
-            .from('Request')
-            .update({ block_by: senderid, block_status: true })
-            .or(`and(request_from.eq.${senderid},request_to.eq.${receiverid}),and(request_from.eq.${receiverid},request_to.eq.${senderid}))`)
-        if (error) {
-            console.log(error);
-        }
-        else {
-            toast.success('User blocked');
-            window.location.reload();
+        if (window.confirm('Are you sure you want to block this user?')) {
 
-        }
 
+            const { error } = await supabase
+                .from('Request')
+                .update({ block_by: senderid, block_status: true })
+                .or(`and(request_from.eq.${senderid},request_to.eq.${receiverid}),and(request_from.eq.${receiverid},request_to.eq.${senderid}))`)
+            if (error) {
+                console.log(error);
+            }
+            else {
+                toast.success('User blocked');
+                window.location.reload();
+
+            }
+        }
 
 
     }
@@ -285,6 +288,28 @@ function Chat() {
             toast.success('User unblocked');
             window.location.reload();
 
+        }
+    }
+
+    const UnfriendUser = async () => {
+
+        if (window.confirm('Are you sure you want to unfriend this user?')) {
+
+
+
+
+            const { error } = await supabase
+                .from('Request')
+                .delete()
+                .or(`and(request_from.eq.${senderid},request_to.eq.${receiverid}),and(request_from.eq.${receiverid},request_to.eq.${senderid}))`)
+
+            if (error) {
+                console.log(error);
+            }
+            else {
+                toast.success('User unfriended');
+                navigate('/msg');
+            }
         }
     }
 
@@ -527,15 +552,21 @@ function Chat() {
                 <MenuItem onClick={handleClose}>
                     View Profile
                 </MenuItem>
+
+                <MenuItem onClick={UnfriendUser}>
+                    Unfriend
+                </MenuItem>
                 {!blockstatus && <MenuItem onClick={blockuser}>
                     Block
                 </MenuItem>}
+
                 {
                     blockby === senderid && <MenuItem onClick={unblockuser}>
                         Unblock
                     </MenuItem>
 
                 }
+
             </Menu>
 
         </Container>
