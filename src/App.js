@@ -50,9 +50,9 @@ function App() {
             <Route exact path="/" element={<Home />} />
             <Route exact path="/login" element={<Login mode={theme} />} />
             <Route exact path="/signup" element={<SignUp mode={theme} />} />
-            <Route exact path="/addfriend" element={<AddFriend />} />
-            <Route exact path="/friends" element={<YourFriend />} />
-            <Route exact path="/msg" element={<Message />} />
+            <Route exact path="/addfriend" element={<AddFriend mode={theme} />} />
+            <Route exact path="/friends" element={<YourFriend mode={theme} />} />
+            <Route exact path="/msg" element={<Message mode={theme} />} />
             <Route exact path="/chat/:id" element={<Chat mode={theme} />} />
 
 

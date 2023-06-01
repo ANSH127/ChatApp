@@ -8,9 +8,11 @@ import Typography from '@mui/material/Typography';
 import { useState, useEffect } from 'react';
 import supabase from '../config/SupabaseClient';
 import { useNavigate } from 'react-router-dom';
-import loading from '../loading.gif' 
 
-export default function AddFriend() {
+import drkthemeloader from '../loading3.gif';
+import lythemeloader from '../loading2.gif';
+
+export default function AddFriend(props) {
     const [list, setList] = useState([]);
     const [userid, setUserid] = useState('');
     const [loader, setLoader] = useState(true);
@@ -98,7 +100,9 @@ export default function AddFriend() {
         {loader &&
         
       <div style={{textAlign:'center'}}>
-      <img className='my-3' src={loading} alt="loading" width='35px' />
+      <img className='my-3' src={
+        props.mode === 'dark' ? drkthemeloader : lythemeloader
+      } alt="loading" width='35px' />
   </div>
         }
         {!loader && <Grid container spacing={2}>

@@ -9,10 +9,13 @@ import Typography from '@mui/material/Typography';
 import { useState, useEffect } from 'react';
 import supabase from '../config/SupabaseClient';
 import { useNavigate } from 'react-router-dom';
-import loading from '../loading.gif'
+import drkthemeloader from '../loading3.gif';
+import lythemeloader from '../loading2.gif';
 
 
-function YourFriend() {
+
+
+function YourFriend(props) {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [requestsent, setRequestsent] = useState([]);
@@ -129,7 +132,9 @@ function YourFriend() {
       <br />
       {sentloader &&
         <div style={{ textAlign: 'center' }}>
-          <img className='my-3' src={loading} alt="loading" width='35px' />
+          <img className='my-3' src={
+            props.mode === 'dark' ? drkthemeloader : lythemeloader
+          } alt="loading" width='35px' />
         </div>}
       {!sentloader && <Grid container spacing={2}>
 
@@ -171,7 +176,9 @@ function YourFriend() {
       <br />
       {receivedloader &&
         <div style={{ textAlign: 'center' }}>
-          <img className='my-3' src={loading} alt="loading" width='35px' />
+          <img className='my-3' src={
+            props.mode === 'dark' ? drkthemeloader : lythemeloader
+          } alt="loading" width='35px' />
         </div>}
 
       {
@@ -219,7 +226,10 @@ function YourFriend() {
       <br />
       {friendloader &&
         <div style={{ textAlign: 'center' }}>
-          <img className='my-3' src={loading} alt="loading" width='35px' />
+          <img className='my-3' src={
+            props.mode === 'dark' ? drkthemeloader : lythemeloader
+            
+          } alt="loading" width='35px' />
         </div>}
 
 

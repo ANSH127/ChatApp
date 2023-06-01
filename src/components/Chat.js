@@ -16,11 +16,13 @@ import Box from '@mui/material/Box';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
-import loading from '../loading.gif'
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
 import CustomizedMenus from '../composables/Menus';
 import SendIcon from '@mui/icons-material/Send';
+
+import drkthemeloader from '../loading3.gif';
+import lythemeloader from '../loading2.gif';
 
 
 function Chat(props) {
@@ -341,7 +343,9 @@ function Chat(props) {
             {loader &&
 
                 <div style={{ textAlign: 'center' }}>
-                    <img className='my-3' src={loading} alt="loading" width='35px' />
+                    <img className='my-3' src={
+                        props.mode === 'dark' ? drkthemeloader : lythemeloader
+                    } alt="loading" width='35px' />
                 </div>
 
             }

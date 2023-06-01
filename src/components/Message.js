@@ -10,13 +10,15 @@ import { useState, useEffect } from 'react';
 import supabase from '../config/SupabaseClient';
 import { useNavigate } from 'react-router-dom';
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
-import loading from '../loading.gif'
 import Badge from '@mui/material/Badge';
 import updateSeen from '../composables/UpdateSeen';
 
+import drkthemeloader from '../loading3.gif';
+import lythemeloader from '../loading2.gif';
 
 
-function Message() {
+
+function Message(props) {
 
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -128,7 +130,9 @@ function Message() {
       {loader &&
 
         <div style={{ textAlign: 'center' }}>
-          <img className='my-3' src={loading} alt="loading" width='35px' />
+          <img className='my-3' src={
+            props.mode === 'light' ? lythemeloader : drkthemeloader
+          } alt="loading" width='35px' />
         </div>
       }
       {!loader && <Grid container spacing={2}>
