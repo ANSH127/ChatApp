@@ -23,7 +23,7 @@ import CustomizedMenus from '../composables/Menus';
 import SendIcon from '@mui/icons-material/Send';
 
 
-function Chat() {
+function Chat(props) {
     const navigate = useNavigate();
     const { id } = useParams()
     const [senderid, setSenderid] = useState('')
@@ -436,7 +436,13 @@ function Chat() {
 
                                     <Typography variant='h6' sx={{ color: "black" }} align='center'>
                                         {
-                                            index === 0 ? <Chip size='medium' label={(item.created_at).slice(0, 10)} /> : (item.created_at).slice(0, 10) === (chat[index - 1]?.created_at).slice(0, 10) ? null : <Chip size='medium' label={(item.created_at).slice(0, 10)} />}
+                                            index === 0 ? <Chip size='medium' color={
+                                                props.mode === 'dark' ? 'success' : 'primary'
+                                            } label={(item.created_at).slice(0, 10)} /> : (item.created_at).slice(0, 10) === (chat[index - 1]?.created_at).slice(0, 10) ? null : <Chip size='medium'
+                                                color={
+                                                    props.mode === 'dark' ? 'success' : 'primary'
+                                                }
+                                             label={(item.created_at).slice(0, 10)} />}
 
 
 
@@ -457,14 +463,21 @@ function Chat() {
                                                 </span>
                                                 <br />
 
-                                                <Chip label={(item.time).slice(0, 5)} />
+                                                <Chip label={(item.time).slice(0, 5)}
+                                                color={
+                                                    props.mode === 'dark' ? 'primary' : 'success'
+                                                }
+                                                 />
                                                 <br />
 
 
 
 
 
-                                                {item.status === 'seen' && <Chip label='Seen' sx={{ backgroundColor: "transparent" }} />}
+                                                {item.status === 'seen' && <Chip label='Seen'
+                                                sx={props.mode === 'dark' ? { backgroundColor: 'transparent', color: '#fff' } : { backgroundColor: 'transparent', color: '#000' }
+                                                }
+                                                  />}
 
                                             </Typography>
 
@@ -480,7 +493,11 @@ function Chat() {
                                                 </span>
 
                                                 <br />
-                                                <Chip label={(item.time).slice(0, 5)} />
+                                                <Chip
+                                                color={
+                                                    props.mode === 'dark' ? 'primary' : 'success'
+                                                }
+                                                 label={(item.time).slice(0, 5)} />
 
 
 

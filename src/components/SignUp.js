@@ -14,7 +14,7 @@ const field = {
 
 }
 
-function SignUp() {
+function SignUp(props) {
     const [details, setDetails] = useState({
         email: '',
         password: '',
@@ -80,7 +80,8 @@ function SignUp() {
                 <form onSubmit={handleSubmit} >
                     <TextField
                         color='secondary'
-                        style={field}
+                        style={props.mode === 'dark' ? { marginBottom: 20, marginTop: 20, display: 'block', backgroundColor: '#fff', color: '#fff' } : { marginBottom: 20, marginTop: 20, display: 'block' }
+                    }
                         fullWidth
                         required
                         id="username"
@@ -90,7 +91,8 @@ function SignUp() {
                     />
                     <TextField
                         color='secondary'
-                        style={field}
+                        style={props.mode === 'dark' ? { marginBottom: 20, marginTop: 20, display: 'block', backgroundColor: '#fff', color: '#fff' } : { marginBottom: 20, marginTop: 20, display: 'block' }
+                    }
                         fullWidth
                         required
                         id="email"
@@ -100,7 +102,8 @@ function SignUp() {
                     />
                     <TextField
                         color='secondary'
-                        style={field}
+                        style={props.mode === 'dark' ? { marginBottom: 20, marginTop: 20, display: 'block', backgroundColor: '#fff', color: '#fff' } : { marginBottom: 20, marginTop: 20, display: 'block' }
+                    }
                         type='password'
                         fullWidth
                         required
@@ -111,7 +114,8 @@ function SignUp() {
                     />
                     <TextField
                         color='secondary'
-                        style={field}
+                        style={props.mode === 'dark' ? { marginBottom: 20, marginTop: 20, display: 'block', backgroundColor: '#fff', color: '#fff' } : { marginBottom: 20, marginTop: 20, display: 'block' }
+                    }
                         type='password'
                         fullWidth
                         required

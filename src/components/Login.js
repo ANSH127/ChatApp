@@ -11,11 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 const field = {
     marginBottom: 20,
     marginTop: 20,
-    display: 'block'
+    display: 'block',
 
 
 }
-function Login() {
+
+function Login(props) {
+    console.log(props.mode);
     const navigate = useNavigate()
     const [details, setDetails] = useState({
         email: '',
@@ -85,17 +87,21 @@ function Login() {
             <form onSubmit={handleSubmit} >
                 <TextField
                     color='secondary'
-                    style={field}
+                    // style={field}
+                    style={props.mode === 'dark' ? { marginBottom: 20, marginTop: 20, display: 'block', backgroundColor: '#fff', color: '#fff' } : { marginBottom: 20, marginTop: 20, display: 'block' }
+                    }
                     fullWidth
                     required
                     id="email"
                     label="Enter Email"
                     variant="standard"
+                    autoComplete='off'
                     onChange={(e) => { setDetails({ ...details, email: e.target.value }) }}
                 />
                 <TextField
                     color='secondary'
-                    style={field}
+                    style={props.mode === 'dark' ? { marginBottom: 20, marginTop: 20, display: 'block', backgroundColor: '#fff', color: '#fff' } : { marginBottom: 20, marginTop: 20, display: 'block' }
+                    }
                     type='password'
                     fullWidth
                     required

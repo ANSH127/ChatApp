@@ -170,7 +170,7 @@ const active = {
   background: '#f4f4f4'
 }
 
-export default function MiniDrawer({ children }) {
+export default function MiniDrawer({ children,...props }) {
   const fetchUser = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
@@ -235,7 +235,11 @@ export default function MiniDrawer({ children }) {
 
           <FormGroup>
             <FormControlLabel
-              control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+              control={<MaterialUISwitch sx={{ m: 1 }}
+              
+              onChange={props.handleChange}
+              inputProps={{ 'aria-label': 'controlled' }}
+                  />}
               
             />
           </FormGroup>
