@@ -69,14 +69,14 @@ export default function CustomizedMenus(props) {
     toast.success('Copied to Clipboard')
   }
 
-  const deleteMsg = async() => {
+  const deleteMsg = async () => {
 
     const { error } = await supabase
       .from('messages')
       .delete()
       .eq('id', props.id)
-    
-    if(error){
+
+    if (error) {
       toast.error('Something went wrong')
       console.log(error)
       return;
@@ -86,6 +86,12 @@ export default function CustomizedMenus(props) {
 
     handleClose();
   }
+  const handleEmoji =(emoji) => { 
+    console.log(emoji);
+    handleClose();
+
+  }
+
 
   return (
     <>
@@ -95,7 +101,7 @@ export default function CustomizedMenus(props) {
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
-        sx={{display:'none'}}
+        sx={{ display: 'none' }}
         onClick={handleClick}
       >
         <MoreVertIcon fontSize='small' />
@@ -110,6 +116,38 @@ export default function CustomizedMenus(props) {
         open={open}
         onClose={handleClose}
       >
+        <MenuItem onClick={handleClose} disableRipple>
+
+          <span className='emoji' id='laughingemoji' onClick={
+            ()=>
+            handleEmoji('&#128512;')
+          }  >
+            &#128512;
+          </span>
+          <span className='emoji' onClick={
+            ()=>
+            handleEmoji('&#128514;')
+          }>
+          &#128514;	
+
+
+          </span>
+          <span className='emoji' onClick={
+            ()=>
+            handleEmoji('&#128077;')
+          }>
+          &#128077;
+
+          </span>
+          <span className='emoji' onClick={
+            ()=>
+            handleEmoji('&#128151;')
+          }>
+
+          &#128151;
+          </span>
+
+        </MenuItem>
         <MenuItem onClick={copyToClipboard} disableRipple>
           <ContentCopyOutlinedIcon fontSize='small' />
           Copy
