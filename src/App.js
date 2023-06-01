@@ -26,8 +26,8 @@ function App() {
       document.getElementsByClassName('css-1jmjcem')[0].style.backgroundColor = '#000';
       document.getElementsByClassName('css-1jmjcem')[0].style.color = '#fff';
       document.getElementsByClassName('css-1jmjcem')[0].style.minHeight = '100vh';
-      document.getElementsByClassName('css-19z1ozs-MuiPaper-root-MuiAppBar-root')[0].style.backgroundColor = '#fff';
-      document.getElementsByClassName('css-19z1ozs-MuiPaper-root-MuiAppBar-root')[0].style.color = '#000';
+      document.getElementById('navbar').style.backgroundColor = '#fff';
+      document.getElementById('navbar').style.color = '#000';
 
 
 
@@ -37,7 +37,7 @@ function App() {
       document.getElementsByClassName('css-1jmjcem')[0].style.backgroundColor = '#fff';
       document.getElementsByClassName('css-1jmjcem')[0].style.color = '#000';
       document.getElementsByClassName('css-1jmjcem')[0].style.minHeight = '100vh';
-      document.getElementsByClassName('css-19z1ozs-MuiPaper-root-MuiAppBar-root')[0].style.backgroundColor = '#1976d2';
+      document.getElementById('navbar').style.backgroundColor = '#1976d2';
 
     }
   };

@@ -8,13 +8,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const field = {
-    marginBottom: 20,
-    marginTop: 20,
-    display: 'block',
 
-
-}
 
 function Login(props) {
     // console.log(props.mode);
