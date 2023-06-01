@@ -454,7 +454,13 @@ function Chat(props) {
 
                                             // onMouseOver={() =>document.getElementById(item.id).style.display='revert'}
                                             >
-                                                <span onMouseOver={() => document.getElementById(item.id).style.display = 'revert'}
+                                                <span onMouseOver={
+                                                    () => {
+                                                        document.getElementById(item.id).style.display = 'revert'
+                                                        document.getElementById(item.id).style.color = props.mode === 'dark' ? '#fff' : '#000'
+                                                }
+                                                    
+                                                }
                                                     onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
                                                 >
 
@@ -489,7 +495,7 @@ function Chat(props) {
                                                 >
 
                                                     {item.msg}
-                                                    <CustomizedMenus id={item.id} msg={item.msg} sender={false} />
+                                                    <CustomizedMenus mode={props.mode} id={item.id} msg={item.msg} sender={false} />
                                                 </span>
 
                                                 <br />

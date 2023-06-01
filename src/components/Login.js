@@ -17,7 +17,7 @@ const field = {
 }
 
 function Login(props) {
-    console.log(props.mode);
+    // console.log(props.mode);
     const navigate = useNavigate()
     const [details, setDetails] = useState({
         email: '',
