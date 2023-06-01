@@ -446,7 +446,7 @@ function Chat(props) {
                                                 color={
                                                     props.mode === 'dark' ? 'success' : 'primary'
                                                 }
-                                             label={(item.created_at).slice(0, 10)} />}
+                                                label={(item.created_at).slice(0, 10)} />}
 
 
 
@@ -462,8 +462,8 @@ function Chat(props) {
                                                     () => {
                                                         document.getElementById(item.id).style.display = 'revert'
                                                         document.getElementById(item.id).style.color = props.mode === 'dark' ? '#fff' : '#000'
-                                                }
-                                                    
+                                                    }
+
                                                 }
                                                     onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
                                                 >
@@ -474,10 +474,10 @@ function Chat(props) {
                                                 <br />
 
                                                 <Chip label={(item.time).slice(0, 5)}
-                                                color={
-                                                    props.mode === 'dark' ? 'primary' : 'success'
-                                                }
-                                                 />
+                                                    color={
+                                                        props.mode === 'dark' ? 'primary' : 'success'
+                                                    }
+                                                />
                                                 <br />
 
 
@@ -485,16 +485,20 @@ function Chat(props) {
 
 
                                                 {item.status === 'seen' && <Chip label='Seen'
-                                                sx={props.mode === 'dark' ? { backgroundColor: 'transparent', color: '#fff' } : { backgroundColor: 'transparent', color: '#000' }
-                                                }
-                                                  />}
+                                                    sx={props.mode === 'dark' ? { backgroundColor: 'transparent', color: '#fff' } : { backgroundColor: 'transparent', color: '#000' }
+                                                    }
+                                                />}
 
                                             </Typography>
 
 
                                             :
                                             <Typography variant='h6' color='primary' align='left'>
-                                                <span onMouseOver={() => document.getElementById(item.id).style.display = 'revert'}
+                                                <span onMouseOver={() => {
+                                                    document.getElementById(item.id).style.display = 'revert'
+                                                    document.getElementById(item.id).style.color = props.mode === 'dark' ? '#fff' : '#000'
+                                                }
+                                                }
                                                     onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
                                                 >
 
@@ -504,10 +508,10 @@ function Chat(props) {
 
                                                 <br />
                                                 <Chip
-                                                color={
-                                                    props.mode === 'dark' ? 'primary' : 'success'
-                                                }
-                                                 label={(item.time).slice(0, 5)} />
+                                                    color={
+                                                        props.mode === 'dark' ? 'primary' : 'success'
+                                                    }
+                                                    label={(item.time).slice(0, 5)} />
 
 
 
