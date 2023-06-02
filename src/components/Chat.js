@@ -4,6 +4,7 @@ import supabase from '../config/SupabaseClient'
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -469,8 +470,20 @@ function Chat(props) {
                                                 >
 
                                                     <CustomizedMenus id={item.id} msg={item.msg} sender={true} />
+                                                    {item.reaction_emoji && <Badge color="primary" badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
+                                                    anchorOrigin={{
+                                                        vertical: 'bottom',
+                                                        horizontal: 'right',
+                                                      }}
+                                                    >
+
                                                     {item.msg}
+                                                    </Badge>}
+                                                    {!item.reaction_emoji && <>{item.msg}</>}
+
+
                                                 </span>
+
                                                 <br />
 
                                                 <Chip label={(item.time).slice(0, 5)}
@@ -501,8 +514,17 @@ function Chat(props) {
                                                 }
                                                     onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
                                                 >
+                                                    {item.reaction_emoji && <Badge color="primary" badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
+                                                    anchorOrigin={{
+                                                        vertical: 'bottom',
+                                                        horizontal: 'left',
+                                                      }}
+                                                    >
 
                                                     {item.msg}
+                                                    </Badge>}
+                                                    {!item.reaction_emoji && <>{item.msg}</>}
+
                                                     <CustomizedMenus mode={props.mode} id={item.id} msg={item.msg} sender={false} />
                                                 </span>
 

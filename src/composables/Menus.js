@@ -86,8 +86,38 @@ export default function CustomizedMenus(props) {
 
     handleClose();
   }
-  const handleEmoji =(emoji) => { 
-    console.log(emoji);
+  const handleEmoji = async (emoji) => {
+    let moji = ''
+    if (emoji === '&#128512;') {
+      moji = '😀';
+
+    }
+    else if (emoji === '&#128514;') {
+      moji = '😂';
+
+    }
+    else if (emoji === '&#128077;') {
+      moji = '👍';
+
+    }
+    else if (emoji === '&#128151;') {
+      moji = '💗';
+
+    }
+    const { error } = await supabase
+      .from('messages')
+      .update({ reaction_emoji: moji })
+      .eq('id', props.id)
+
+    if (error) {
+      toast.error('Something went wrong')
+      console.log(error)
+      return;
+    }
+    toast.success('Emoji Added')
+
+
+
     handleClose();
 
   }
@@ -119,32 +149,32 @@ export default function CustomizedMenus(props) {
         <MenuItem onClick={handleClose} disableRipple>
 
           <span className='emoji' id='laughingemoji' onClick={
-            ()=>
-            handleEmoji('&#128512;')
+            () =>
+              handleEmoji('&#128512;')
           }  >
             &#128512;
           </span>
           <span className='emoji' onClick={
-            ()=>
-            handleEmoji('&#128514;')
+            () =>
+              handleEmoji('&#128514;')
           }>
-          &#128514;	
+            &#128514;
 
 
           </span>
           <span className='emoji' onClick={
-            ()=>
-            handleEmoji('&#128077;')
+            () =>
+              handleEmoji('&#128077;')
           }>
-          &#128077;
+            &#128077;
 
           </span>
           <span className='emoji' onClick={
-            ()=>
-            handleEmoji('&#128151;')
+            () =>
+              handleEmoji('&#128151;')
           }>
 
-          &#128151;
+            &#128151;
           </span>
 
         </MenuItem>
