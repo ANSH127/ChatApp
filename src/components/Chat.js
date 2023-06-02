@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 
+
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
@@ -24,6 +25,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 import drkthemeloader from '../loading3.gif';
 import lythemeloader from '../loading2.gif';
+import RemoveEmoji from '../composables/RemoveEmoji';
 
 
 function Chat(props) {
@@ -519,11 +521,18 @@ function Chat(props) {
                                                 >
                                                     {item.reaction_emoji && <Badge color={
                                                         props.mode === 'dark' ? 'success' : 'primary'
-                                                    } badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
+                                                    } badgeContent={item.reaction_emoji} sx={{marginBottom:1,
+                                                        cursor:'pointer'
+                                                    }}
                                                     anchorOrigin={{
                                                         vertical: 'bottom',
                                                         horizontal: 'left',
+                                                        
                                                       }}
+                                                    onClick={() =>
+                                                        RemoveEmoji(item.id)
+                                                    }
+                                                    
                                                     >
 
                                                     {item.msg}
