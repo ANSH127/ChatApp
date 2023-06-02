@@ -390,7 +390,8 @@ function Chat(props) {
                             <TextField
                                 color='primary'
                                 sx={{
-                                    position: 'fixed', bottom: 0, marginBottom: 2, width: 'auto'
+                                    position: 'fixed', bottom: 0, marginBottom: 2, width: 'auto',
+                                    backgroundColor: props.mode === 'dark' ? '#424242' : '#fff'
 
 
                                 }}
