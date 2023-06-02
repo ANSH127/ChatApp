@@ -470,7 +470,9 @@ function Chat(props) {
                                                 >
 
                                                     <CustomizedMenus id={item.id} msg={item.msg} sender={true} />
-                                                    {item.reaction_emoji && <Badge color="primary" badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
+                                                    {item.reaction_emoji && <Badge color={
+                                                        props.mode === 'dark' ? 'success' : 'primary'
+                                                    } badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
                                                     anchorOrigin={{
                                                         vertical: 'bottom',
                                                         horizontal: 'right',
@@ -514,7 +516,9 @@ function Chat(props) {
                                                 }
                                                     onMouseOut={() => document.getElementById(item.id).style.display = 'none'}
                                                 >
-                                                    {item.reaction_emoji && <Badge color="primary" badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
+                                                    {item.reaction_emoji && <Badge color={
+                                                        props.mode === 'dark' ? 'success' : 'primary'
+                                                    } badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
                                                     anchorOrigin={{
                                                         vertical: 'bottom',
                                                         horizontal: 'left',

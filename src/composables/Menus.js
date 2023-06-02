@@ -146,7 +146,7 @@ export default function CustomizedMenus(props) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        {!props.sender && <MenuItem onClick={handleClose} disableRipple>
 
           <span className='emoji' id='laughingemoji' onClick={
             () =>
@@ -177,7 +177,7 @@ export default function CustomizedMenus(props) {
             &#128151;
           </span>
 
-        </MenuItem>
+        </MenuItem>}
         <MenuItem onClick={copyToClipboard} disableRipple>
           <ContentCopyOutlinedIcon fontSize='small' />
           Copy
