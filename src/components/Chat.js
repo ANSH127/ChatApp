@@ -31,7 +31,11 @@ import RemoveEmoji from '../composables/RemoveEmoji';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
+import BlockIcon from '@mui/icons-material/Block';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import Tooltip from '@mui/material/Tooltip';
 
 const style = {
     position: 'absolute',
@@ -417,7 +421,16 @@ function Chat(props) {
                                     <div style={{ textAlign: 'center' }} >
                                         <h3>
                                             {receivername}
-
+                                        <br />
+                                        <Tooltip title='Unfriend' placement='top'>
+                                        <PersonRemoveIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={UnfriendUser} />
+                                        </Tooltip>
+                                        <Tooltip title='Block' placement='top'>
+                                        <BlockIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={blockuser} />
+                                        </Tooltip>
+                                        <Tooltip title='Report' placement='top'>
+                                        <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} />
+                                        </Tooltip>
                                         </h3>
 
                                     </div>

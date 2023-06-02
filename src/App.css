@@ -17,6 +17,10 @@
 .emoji:hover{
   font-size: x-large;
 }
+.profile-icon:hover{
+  color: #1976d2;
+  font-size: 26px !important;
+}
 
 .App {
   text-align: center;
