@@ -28,6 +28,23 @@ import lythemeloader from '../loading2.gif';
 import RemoveEmoji from '../composables/RemoveEmoji';
 
 
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 function Chat(props) {
     const navigate = useNavigate();
     const { id } = useParams()
@@ -43,6 +60,9 @@ function Chat(props) {
     const [blockstatus, setBlockstatus] = useState(false);
     const [blockby, setBlockby] = useState('');
 
+    const [open2, setOpen2] = React.useState(false);
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
     const Verify = async (sid) => {
         const { data, error } = await supabase
             .from('Request')
@@ -374,6 +394,32 @@ function Chat(props) {
                         </h3>
 
                     </div>
+                    <div>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            open={open2}
+                            onClose={handleClose2}
+                            closeAfterTransition
+                            slots={{ backdrop: Backdrop }}
+                            slotProps={{
+                                backdrop: {
+                                    timeout: 500,
+                                },
+                            }}
+                        >
+                            <Fade in={open2}>
+                                <Box sx={style}>
+                                    <Typography id="transition-modal-title" variant="h6" component="h2">
+                                        Text in a modal
+                                    </Typography>
+                                    <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                                    </Typography>
+                                </Box>
+                            </Fade>
+                        </Modal>
+                    </div>
 
 
                     <Box
@@ -475,14 +521,14 @@ function Chat(props) {
                                                     <CustomizedMenus id={item.id} msg={item.msg} sender={true} />
                                                     {item.reaction_emoji && <Badge color={
                                                         props.mode === 'dark' ? 'success' : 'primary'
-                                                    } badgeContent={item.reaction_emoji} sx={{marginBottom:1}}
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'right',
-                                                      }}
+                                                    } badgeContent={item.reaction_emoji} sx={{ marginBottom: 1 }}
+                                                        anchorOrigin={{
+                                                            vertical: 'bottom',
+                                                            horizontal: 'right',
+                                                        }}
                                                     >
 
-                                                    {item.msg}
+                                                        {item.msg}
                                                     </Badge>}
                                                     {!item.reaction_emoji && <>{item.msg}</>}
 
@@ -521,21 +567,22 @@ function Chat(props) {
                                                 >
                                                     {item.reaction_emoji && <Badge color={
                                                         props.mode === 'dark' ? 'success' : 'primary'
-                                                    } badgeContent={item.reaction_emoji} sx={{marginBottom:1,
-                                                        cursor:'pointer'
+                                                    } badgeContent={item.reaction_emoji} sx={{
+                                                        marginBottom: 1,
+                                                        cursor: 'pointer'
                                                     }}
-                                                    anchorOrigin={{
-                                                        vertical: 'bottom',
-                                                        horizontal: 'left',
-                                                        
-                                                      }}
-                                                    onClick={() =>
-                                                        RemoveEmoji(item.id)
-                                                    }
-                                                    
+                                                        anchorOrigin={{
+                                                            vertical: 'bottom',
+                                                            horizontal: 'left',
+
+                                                        }}
+                                                        onClick={() =>
+                                                            RemoveEmoji(item.id)
+                                                        }
+
                                                     >
 
-                                                    {item.msg}
+                                                        {item.msg}
                                                     </Badge>}
                                                     {!item.reaction_emoji && <>{item.msg}</>}
 
@@ -616,7 +663,7 @@ function Chat(props) {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleOpen2}>
                     View Profile
                 </MenuItem>
 
