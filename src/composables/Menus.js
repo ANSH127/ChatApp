@@ -6,6 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import Grid from '@mui/material/Grid';
 
 import supabase from '../config/SupabaseClient';
 import { toast } from 'react-toastify';
@@ -40,7 +41,7 @@ const StyledMenu = styled((props) => (
       '& .MuiSvgIcon-root': {
         fontSize: 18,
         color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
+        marginRight: theme.spacing(1.3),
       },
       '&:active': {
         backgroundColor: alpha(
@@ -147,35 +148,36 @@ export default function CustomizedMenus(props) {
         onClose={handleClose}
       >
         {!props.sender && <MenuItem onClick={handleClose} disableRipple>
+          <Grid container >
+            <Grid item xs={3} md={3} className='emoji' id='laughingemoji' onClick={
+              () =>
+                handleEmoji('&#128512;')
+            } >
+              &#128512;
+            </Grid>
+            <Grid item xs={3} md={3} className='emoji' onClick={
+              () =>
+                handleEmoji('&#128514;')
+            } >
+              &#128514;
 
-          <span className='emoji' id='laughingemoji' onClick={
-            () =>
-              handleEmoji('&#128512;')
-          }  >
-            &#128512;
-          </span>
-          <span className='emoji' onClick={
-            () =>
-              handleEmoji('&#128514;')
-          }>
-            &#128514;
+            </Grid>
+            <Grid item xs={3} md={3} className='emoji' onClick={
+              () =>
+                handleEmoji('&#128077;')
+            } >
+              &#128077;
+
+            </Grid>
+            <Grid item xs={3} md={3} className='emoji' onClick={
+              () =>
+                handleEmoji('&#128151;')
+            } >
 
 
-          </span>
-          <span className='emoji' onClick={
-            () =>
-              handleEmoji('&#128077;')
-          }>
-            &#128077;
-
-          </span>
-          <span className='emoji' onClick={
-            () =>
-              handleEmoji('&#128151;')
-          }>
-
-            &#128151;
-          </span>
+              &#128151;
+            </Grid>
+          </Grid>
 
         </MenuItem>}
         <MenuItem onClick={copyToClipboard} disableRipple>
