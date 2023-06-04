@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -34,6 +35,12 @@ import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import Fade from '@mui/material/Fade';
+import EditIcon from '@mui/icons-material/Edit';
+
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
@@ -80,6 +87,19 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     borderRadius: 20 / 2,
   },
 }));
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 3
+};
 
 
 
@@ -170,7 +190,7 @@ const active = {
   background: '#f4f4f4'
 }
 
-export default function MiniDrawer({ children,...props }) {
+export default function MiniDrawer({ children, ...props }) {
   const fetchUser = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
@@ -202,6 +222,10 @@ export default function MiniDrawer({ children,...props }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const [open2, setOpen2] = React.useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -236,17 +260,17 @@ export default function MiniDrawer({ children,...props }) {
           <FormGroup>
             <FormControlLabel
               control={<MaterialUISwitch sx={{ m: 1 }}
-              
-              onChange={props.handleChange}
-              inputProps={{ 'aria-label': 'controlled' }}
-                  />}
-              
+
+                onChange={props.handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />}
+
             />
           </FormGroup>
           <Typography>
             {username}
           </Typography>
-          <Avatar alt="Remy Sharp" src="/60111.jpg" sx={{ ml: 2 }} />
+          <Avatar alt="Remy Sharp" src="/60111.jpg" sx={{ ml: 2 }} onClick={handleOpen2} />
 
         </Toolbar>
       </AppBar>
@@ -344,6 +368,65 @@ export default function MiniDrawer({ children,...props }) {
         <Toolbar />
         {children}
       </Box>
+      <div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open2}
+        onClose={handleClose2}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open2}>
+          <Box sx={style}>
+          <Avatar alt="Ansh" align='center' src="/60111.jpg" sx={{ width: 60, height: 60, margin: 'auto' }} />
+          <div style={{ textAlign: 'center' }} >
+            <h3>
+            {username}
+            <br />
+            <Tooltip title="Edit Profile" placement="top">
+            <EditIcon color='primary' sx={{ ml: 1,cursor:'pointer' }} onClick={() =>
+              {
+
+                navigate('/editprofile')
+                handleClose2();
+              }
+               } />
+            </Tooltip>
+            <Tooltip title="Logout" placement="top">
+            <LogoutIcon color='primary' sx={{ ml: 1,cursor:'pointer' }} onClick=
+            {async () => {
+
+              const { error } = await supabase.auth.signOut()
+              if (error) {
+                console.log('Error logging out:', error.message);
+                toast.error(error.message);
+                return;
+              }
+
+              setUser(false);
+              navigate('/login')
+              handleClose2();
+
+            }
+            } />
+            </Tooltip>
+
+
+
+
+            </h3>
+          </div>
+          </Box>
+        </Fade>
+      </Modal>
+      </div>
     </Box>
+
   );
 }
