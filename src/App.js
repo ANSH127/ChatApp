@@ -15,6 +15,7 @@ import AddFriend from './components/AddFriend';
 import YourFriend from './components/YourFriend';
 import Message from './components/Message';
 import Chat from './components/Chat';
+import EditProfile from './components/EditProfile';
 import React from 'react';
 function App() {
   const [theme, setTheme] = React.useState('light');
@@ -53,6 +54,7 @@ function App() {
             <Route exact path="/friends" element={<YourFriend mode={theme} />} />
             <Route exact path="/msg" element={<Message mode={theme} />} />
             <Route exact path="/chat/:id" element={<Chat mode={theme} />} />
+            <Route exact path="/editprofile" element={<EditProfile mode={theme} />} />
 
 
           </Routes>
