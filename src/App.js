@@ -16,7 +16,6 @@ import YourFriend from './components/YourFriend';
 import Message from './components/Message';
 import Chat from './components/Chat';
 import React from 'react';
-
 function App() {
   const [theme, setTheme] = React.useState('light');
 

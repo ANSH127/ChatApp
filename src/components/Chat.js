@@ -38,6 +38,11 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 
+import FormControl from '@mui/material/FormControl';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -69,6 +74,28 @@ function Chat(props) {
     const [open2, setOpen2] = React.useState(false);
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
+    
+    const [open3, setOpen3] = React.useState(true);
+    const [value, setValue] = React.useState(null);
+
+    const handleOpen3 = () => setOpen3(true);
+    const handleClose3 = () => setOpen3(false);
+    const reportUser = async() => {
+        console.log(value);
+        const {  error } = await supabase
+            .from('Report')
+            .insert({ report_from: senderid, report_to: receiverid, reason: value })
+
+        if (error) {
+            console.log(error);
+        }
+        else {
+            toast.success('User reported');
+        }
+
+        handleClose3();
+    }
+
     const Verify = async (sid) => {
         const { data, error } = await supabase
             .from('Request')
@@ -422,29 +449,83 @@ function Chat(props) {
                                     <div style={{ textAlign: 'center' }} >
                                         <h3>
                                             {receivername}
-                                        <br />
-                                        <Tooltip title='Unfriend' placement='top'>
-                                        <PersonRemoveIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={UnfriendUser} />
-                                        </Tooltip>
-                                        {!blockstatus && <Tooltip title='Block' placement='top'>
-                                        <BlockIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} 
-                                        onClick={()=>{
-                                            blockuser();
-                                            handleClose2();
-                                        }}
-                                         />
-                                        </Tooltip>}
-                                        {blockstatus && blockby === senderid
-                                            && <Tooltip title='Unblock' placement='top'>
-                                            <LockOpenIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={unblockuser} />
+                                            <br />
+                                            <Tooltip title='Unfriend' placement='top'>
+                                                <PersonRemoveIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }} onClick={UnfriendUser} />
                                             </Tooltip>
-                                        }
-                                        <Tooltip title='Report' placement='top'>
-                                        <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={handleClose2} />
-                                        </Tooltip>
+                                            {!blockstatus && <Tooltip title='Block' placement='top'>
+                                                <BlockIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }}
+                                                    onClick={() => {
+                                                        blockuser();
+                                                        handleClose2();
+                                                    }}
+                                                />
+                                            </Tooltip>}
+                                            {blockstatus && blockby === senderid
+                                                && <Tooltip title='Unblock' placement='top'>
+                                                    <LockOpenIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }} onClick={unblockuser} />
+                                                </Tooltip>
+                                            }
+                                            <Tooltip title='Report' placement='top'>
+                                                <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }} onClick={handleOpen3} />
+                                            </Tooltip>
                                         </h3>
 
                                     </div>
+                                </Box>
+                            </Fade>
+                        </Modal>
+                    </div>
+                    <div>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            open={open3}
+                            onClose={handleClose3}
+                            closeAfterTransition
+                            slots={{ backdrop: Backdrop }}
+                            slotProps={{
+                                backdrop: {
+                                    timeout: 500,
+                                },
+                            }}
+                        >
+                            <Fade in={open3}>
+                                <Box sx={style}>
+                                    <h4 style={{ textAlign: 'center' }}>Report User</h4>
+                                    <FormControl>
+                                        <RadioGroup
+                                            aria-labelledby="demo-radio-buttons-group-label"
+                                            defaultValue="female"
+                                            name="radio-buttons-group"
+                                            value={value}
+                                            onChange={(e) => setValue(e.target.value)}
+                                        >
+                                            <FormControlLabel value="Nudity or sexual activity" control={<Radio />} label="
+                                    Nudity or sexual activity" />
+
+                                            <FormControlLabel value="Hate speech or symbols" control={<Radio />} label="
+                                    Hate speech or symbols" />
+
+                                            <FormControlLabel value="Violence or dangerous organizations" control={<Radio />} label="
+                                    Violence or dangerous organizations" />
+
+                                            <FormControlLabel value="Harassment or bullying" control={<Radio />} label="
+                                    Harassment or bullying" />
+
+                                            <FormControlLabel value="Sale or promotion of illegal or regulated goods" control={<Radio />} label="
+                                    Sale or promotion of illegal or regulated goods" />
+
+                                            <FormControlLabel value="Self-harm" control={<Radio />} label="
+
+                                    Self-harm" />
+                                            <FormControlLabel value="Other" control={<Radio />} label="Other" />
+
+
+                                        </RadioGroup>
+                                        {value && <Button variant="contained" onClick={reportUser} style={{ backgroundColor: '#1976d2', color: '#fff', marginTop: '10px' }}>Report</Button>}
+                                    </FormControl>
+
                                 </Box>
                             </Fade>
                         </Modal>
