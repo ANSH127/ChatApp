@@ -5,39 +5,30 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
-
-
+import updateSeen from '../composables/UpdateSeen';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { Button, TextField, Container } from '@mui/material'
 import Chip from '@mui/material/Chip';
-
 import Box from '@mui/material/Box';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import { Avatar } from '@mui/material';
 import format from 'date-fns/format';
 import CustomizedMenus from '../composables/Menus';
 import SendIcon from '@mui/icons-material/Send';
-
 import drkthemeloader from '../loading3.gif';
 import lythemeloader from '../loading2.gif';
 import RemoveEmoji from '../composables/RemoveEmoji';
-
-
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import BlockIcon from '@mui/icons-material/Block';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-
 import FormControl from '@mui/material/FormControl';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -70,12 +61,13 @@ function Chat(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [blockstatus, setBlockstatus] = useState(false);
     const [blockby, setBlockby] = useState('');
+    const [isrepoted, setIsreported] = useState(false);
 
     const [open2, setOpen2] = React.useState(false);
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
     
-    const [open3, setOpen3] = React.useState(true);
+    const [open3, setOpen3] = React.useState(false);
     const [value, setValue] = React.useState(null);
 
     const handleOpen3 = () => setOpen3(true);
@@ -94,6 +86,22 @@ function Chat(props) {
         }
 
         handleClose3();
+    }
+    const checkReport = async () => {
+        const { data, error } = await supabase
+            .from('Report')
+            .select()
+            .eq('report_from', senderid)
+            .eq('report_to', receiverid)
+        if (error) {
+            console.log(error);
+        }
+        else {
+            if (data.length > 0) {
+                setIsreported(true);
+            }
+        }
+        
     }
 
     const Verify = async (sid) => {
@@ -205,7 +213,7 @@ function Chat(props) {
             setLoader(false);
             scrolltoBottom();
             handleSeen(sid, rid);
-            updateSeen();
+            updateSeen(sid);
 
 
 
@@ -235,15 +243,6 @@ function Chat(props) {
         }
         else {
             setReceivername(data[0].username);
-        }
-    }
-    const updateSeen = async () => {
-        const { error } = await supabase
-            .from('Users')
-            .update({ last_seen: new Date().toLocaleTimeString(), last_seen_date: format(new Date(), 'yyyy-MM-dd') })
-            .eq('user_id', senderid)
-        if (error) {
-            console.log(error);
         }
     }
     const reciverlastseen = async (id) => {
@@ -467,7 +466,13 @@ function Chat(props) {
                                                 </Tooltip>
                                             }
                                             <Tooltip title='Report' placement='top'>
-                                                <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }} onClick={handleOpen3} />
+                                                <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }} 
+                                                onClick={()=>{
+                                                checkReport();
+                                                handleOpen3();
+                                                handleClose2();
+                                                }
+                                                } />
                                             </Tooltip>
                                         </h3>
 
@@ -493,7 +498,7 @@ function Chat(props) {
                             <Fade in={open3}>
                                 <Box sx={style}>
                                     <h4 style={{ textAlign: 'center' }}>Report User</h4>
-                                    <FormControl>
+                                    {!isrepoted && <FormControl>
                                         <RadioGroup
                                             aria-labelledby="demo-radio-buttons-group-label"
                                             defaultValue="female"
@@ -524,7 +529,8 @@ function Chat(props) {
 
                                         </RadioGroup>
                                         {value && <Button variant="contained" onClick={reportUser} style={{ backgroundColor: '#1976d2', color: '#fff', marginTop: '10px' }}>Report</Button>}
-                                    </FormControl>
+                                    </FormControl>}
+                                    {isrepoted && <Typography variant='h6' align='center' sx={{ color: 'red' }}>You already reported this user</Typography>}
 
                                 </Box>
                             </Fade>
@@ -773,7 +779,14 @@ function Chat(props) {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleOpen2}>
+                <MenuItem onClick={
+                    ()=>{
+
+                        handleOpen2()
+                    }
+                    
+
+                    }>
                     View Profile
                 </MenuItem>
 
