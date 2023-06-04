@@ -36,6 +36,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 const style = {
     position: 'absolute',
@@ -425,11 +426,21 @@ function Chat(props) {
                                         <Tooltip title='Unfriend' placement='top'>
                                         <PersonRemoveIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={UnfriendUser} />
                                         </Tooltip>
-                                        <Tooltip title='Block' placement='top'>
-                                        <BlockIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={blockuser} />
-                                        </Tooltip>
+                                        {!blockstatus && <Tooltip title='Block' placement='top'>
+                                        <BlockIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} 
+                                        onClick={()=>{
+                                            blockuser();
+                                            handleClose2();
+                                        }}
+                                         />
+                                        </Tooltip>}
+                                        {blockstatus && blockby === senderid
+                                            && <Tooltip title='Unblock' placement='top'>
+                                            <LockOpenIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={unblockuser} />
+                                            </Tooltip>
+                                        }
                                         <Tooltip title='Report' placement='top'>
-                                        <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} />
+                                        <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer',margin:'2px 8px' }} onClick={handleClose2} />
                                         </Tooltip>
                                         </h3>
 
