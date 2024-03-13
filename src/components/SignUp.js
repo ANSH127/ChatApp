@@ -6,13 +6,7 @@ import { Typography, Button, TextField, Container } from '@mui/material'
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import { useState } from 'react';
 import supabase from '../config/SupabaseClient';
-const field = {
-    marginBottom: 20,
-    marginTop: 20,
-    display: 'block'
 
-
-}
 
 function SignUp(props) {
     const [details, setDetails] = useState({
