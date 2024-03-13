@@ -602,7 +602,7 @@ function Chat(props) {
 
                             return (
 
-                                (item.status !== 'seen' || (new Date().getTime() - new Date(item.created_at).getTime())+19800000 < 10000)
+                                (item.status !== 'seen' || (new Date().getTime() - new Date(item.created_at).getTime())+19800000 < 60000)
                                  && <div key={item.id}>
 
 
