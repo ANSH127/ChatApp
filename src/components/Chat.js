@@ -599,9 +599,11 @@ function Chat(props) {
 
 
                         {chat.map((item, index) => {
+
                             return (
 
-                               item.status!=='seen' && <div key={item.id}>
+                                (item.status !== 'seen' || (new Date().getTime() - new Date(item.created_at).getTime())+19800000 < 10000)
+                                 && <div key={item.id}>
 
 
                                     <Typography variant='h6' sx={{ color: "black" }} align='center'>
