@@ -66,15 +66,15 @@ function Chat(props) {
     const [open2, setOpen2] = React.useState(false);
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
-    
+
     const [open3, setOpen3] = React.useState(false);
     const [value, setValue] = React.useState(null);
 
     const handleOpen3 = () => setOpen3(true);
     const handleClose3 = () => setOpen3(false);
-    const reportUser = async() => {
+    const reportUser = async () => {
         console.log(value);
-        const {  error } = await supabase
+        const { error } = await supabase
             .from('Report')
             .insert({ report_from: senderid, report_to: receiverid, reason: value })
 
@@ -101,7 +101,7 @@ function Chat(props) {
                 setIsreported(true);
             }
         }
-        
+
     }
 
     const Verify = async (sid) => {
@@ -466,13 +466,13 @@ function Chat(props) {
                                                 </Tooltip>
                                             }
                                             <Tooltip title='Report' placement='top'>
-                                                <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }} 
-                                                onClick={()=>{
-                                                checkReport();
-                                                handleOpen3();
-                                                handleClose2();
-                                                }
-                                                } />
+                                                <ReportProblemIcon className='profile-icon' sx={{ cursor: 'pointer', margin: '2px 8px' }}
+                                                    onClick={() => {
+                                                        checkReport();
+                                                        handleOpen3();
+                                                        handleClose2();
+                                                    }
+                                                    } />
                                             </Tooltip>
                                         </h3>
 
@@ -601,7 +601,7 @@ function Chat(props) {
                         {chat.map((item, index) => {
                             return (
 
-                                <div key={item.id}>
+                               item.status!=='seen' && <div key={item.id}>
 
 
                                     <Typography variant='h6' sx={{ color: "black" }} align='center'>
@@ -780,13 +780,13 @@ function Chat(props) {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem onClick={
-                    ()=>{
+                    () => {
 
                         handleOpen2()
                     }
-                    
 
-                    }>
+
+                }>
                     View Profile
                 </MenuItem>
 
